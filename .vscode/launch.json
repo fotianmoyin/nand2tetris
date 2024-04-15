@@ -1,0 +1,60 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Assembler",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/06/assembler.py",
+            "console": "integratedTerminal",
+            "args": "${command:pickArgs}"
+        },
+        {
+            "name": "Vmtranslator",
+            "type": "debugpy",
+            "request": "launch",
+            // "program": "${workspaceFolder}/07/vmtranslator.py",
+            // "program": "${workspaceFolder}/08/vmtranslator.py",
+            // "program": "${workspaceFolder}/10/jack_analyzer.py",
+            "program": "${workspaceFolder}/11/jack_compiler.py",
+            "console": "integratedTerminal",
+            // "args": "${command:pickArgs}"
+            // "args": "07/StackArithmetic/SimpleAdd/SimpleAdd.vm"
+            // "args": "07/StackArithmetic/StackTest"
+            // "args": "07/MemoryAccess/BasicTest"
+            // "args": "07/MemoryAccess/PointerTest"
+            // "args": "07/MemoryAccess/StaticTest"
+
+            // "args": "08/ProgramFlow/BasicLoop"
+            // "args": "08/ProgramFlow/FibonacciSeries"
+            // "args": "08/FunctionCalls/SimpleFunction"
+            // "args": "08/FunctionCalls/FibonacciElement"
+            // "args": "08/SelfDemo/Add/Sys.vm"
+            // "args": "08/SelfDemo/Power/Sys.vm"
+            // "args": "08/SelfDemo/Adder/Sys.vm"
+            // "args": "08/FunctionCalls/StaticsTest"
+            // "args": "08/FunctionCalls/NestedCall"
+
+            // "args": "09/Pong/Ball.jack"
+
+            // "args": "10/Square"
+            // "args": "10/ArrayTest"
+            // "args": "10/ExpressionLessSquare"
+
+            // "args": "11/Simple"
+            // "args": "11/Seven"
+            // "args": "11/Square"
+            // "args": "11/Average"
+            // "args": "11/Pong"
+            // "args": "11/Pong/Ball.jack"
+            // "args": "11/ComplexArrays"
+            "args": "11/ConvertToBin"
+            
+            
+            
+        }
+    ]
+}

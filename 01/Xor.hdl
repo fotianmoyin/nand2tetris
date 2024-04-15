@@ -1,0 +1,33 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Xor.hdl
+
+/**
+ * Exclusive-or gate:
+ * out = not (a == b)
+ */
+
+CHIP Xor {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+    /*
+    真值表如下：
+    |   a   |   b   |  out  |
+    |   0   |   0   |   0   |
+    |   0   |   1   |   1   |
+    |   1   |   0   |   1   |
+    |   1   |   1   |   0   |
+    通过真值表得到逻辑表达时如下：
+    !AB + A!B
+    将逻辑表达式转为逻辑电路即可
+    */
+    Not(in=a, out=na);
+    Not(in=b, out=nb);
+    And(a=a, b=nb, out=o1);
+    And(a=na, b=b, out=o2);
+    Or(a=o1, b=o2, out=out);
+}

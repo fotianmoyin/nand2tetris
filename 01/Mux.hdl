@@ -1,0 +1,40 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux.hdl
+
+/** 
+ * Multiplexor:
+ * out = a if sel == 0
+ *       b otherwise
+ */
+
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+    /*选择器真值表如下：
+    |   a   |   b   |  sel  |  out  |
+    |   0   |   0   |   0   |   0   |
+    |   0   |   1   |   0   |   0   |
+    |   1   |   0   |   0   |   1   |
+    |   1   |   1   |   0   |   1   |
+    |   0   |   0   |   1   |   0   |
+    |   0   |   1   |   1   |   1   |
+    |   1   |   0   |   1   |   0   |
+    |   1   |   1   |   1   |   1   |
+    选择真值表中out为1的行，得到逻辑表达式如下：
+    = A!B!sel + AB!sel + !ABsel + ABsel
+    化减步骤如下：
+    = (A!B!sel + AB!sel) + (!ABsel + ABsel)
+    = A!sel(!B + B) + Bsel(!A + A)
+    = A!sel + Bsel
+    通过简化后的逻辑表达式，我们就可以很容易构建出逻辑电路
+    */
+    Not(in=sel, out=nsel);
+    And(a=a, b=nsel, out=o1);
+    And(a=sel, b=b, out=o2);
+    Or(a=o1, b=o2, out=out);
+}

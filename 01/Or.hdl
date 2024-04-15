@@ -1,0 +1,34 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Or.hdl
+
+ /**
+ * Or gate:
+ * out = 1 if (a == 1 or b == 1)
+ *       0 otherwise
+ */
+
+CHIP Or {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+    /*真值表如下：
+    |   a   |   b   |  out  |
+    |   0   |   0   |   0   |
+    |   0   |   1   |   1   |
+    |   1   |   0   |   1   |
+    |   1   |   1   |   1   |
+    通过观察发现，只要对out为0的行取反，就可以得到其余的逻辑结果。
+    out为0的逻辑表达式如下：
+    !A!B
+    那么其余行的逻辑表达式如下：
+    Not(!A!B)
+    */
+    Not(in=a, out=na);
+    Not(in=b, out=nb);
+    And(a=na, b=nb, out=o1);
+    Not(in=o1, out=out);
+}

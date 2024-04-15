@@ -1,0 +1,126 @@
+class PongGame{
+    field Ball ball;
+    field Bat bat;
+    field int direction;//拍子移动方向（0：不动；1：向左；2：向右）
+    field int bottom;
+    field int score;
+    field boolean start;
+    
+
+    constructor PongGame new(){
+        let ball = Ball.new();
+        let bat = Bat.new();
+        let bottom = 230;
+        do gameOver();
+        return this;
+    }
+
+    method void dispose() {
+        do ball.dispose();
+        do bat.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void gameOver(){
+        let start = false;
+        do Screen.clearScreen();
+        do Screen.setColor(true);
+        do Output.moveCursor(10,20);
+        do Output.printString("Press [S] Start");
+        return;
+    }
+
+    method void gameStart(){
+        do Screen.clearScreen();
+        let start = true;
+        let score = 3;
+        do Screen.setColor(true);
+        do Screen.drawRectangle(0, bottom, 511, bottom + 2);
+        do Output.moveCursor(22,0);
+        do Output.printString("SCORE:");
+        do showScore();
+        do bat.draw();
+        return;
+    }
+
+    method void showScore(){
+        do Screen.setColor(true);
+        do Output.moveCursor(22,6);
+        do Output.printInt(score);
+        return;
+    }
+
+    method void move(){
+        var int ballX,ballY,batX,batY,batWidth;
+        if (~(start)){
+            return;
+        }
+        
+        do ball.move();
+        if (direction = 1) { do bat.moveLeft(); }
+        if (direction = 2) { do bat.moveRight(); }
+        if (ball.isGoDown()){
+            
+            let ballY = ball.getBottom();
+            let ballX = ball.getX();
+            let batX = bat.getX();
+            let batY = bat.getY();
+            let batWidth = bat.getWidth();
+            if ((ballY > (batY - 1)) | (ballY = (batY - 1))){
+                if ((ballX > batX) & (ballX < (batX + batWidth))){
+                    let score = score + 1;
+                    do ball.setGoUp();
+                    do showScore();
+                }
+                else{
+                    if (score > 0){
+                        let score = score - 1;
+                        do showScore();
+                    }
+                    if (score = 0){
+                        do Sys.wait(1000);
+                        do gameOver();
+                        return;
+                    }
+                    else{
+                        do ball.start();
+                    }
+                }
+                
+                
+            }
+        }
+        
+        do Sys.wait(5);
+        return;
+    }
+
+    method void run(){
+        var char key;  // the key currently pressed by the user
+        var boolean exit;
+        let exit = false;
+        while (~exit) {
+            // waits for a key to be pressed
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+                do move();
+            }
+
+            if (key = 81)  { let exit = true; }     // q key
+            if (key = 83)  { do gameStart(); }    // s key
+            if (key = 130) { let direction = 1; }   // left arrow
+            if (key = 132) { let direction = 2; }   // right arrow
+
+            // waits for the key to be released
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do move();
+            }
+            let direction = 0;
+        } // while
+        return;
+    }
+
+
+}

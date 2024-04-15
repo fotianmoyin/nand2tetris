@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>13</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>汇编编译器</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="0" column="1">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="images.qrc">:/img/imgs/arrow2.gif</pixmap>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="images.qrc">:/img/imgs/equal.gif</pixmap>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>汇编程序</string>
+        </property>
+        <property name="margin">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QListWidget" name="lsw_asm">
+        <property name="uniformItemSizes">
+         <bool>false</bool>
+        </property>
+        <property name="selectionRectVisible">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="2">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>机器代码</string>
+        </property>
+        <property name="margin">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QListWidget" name="lsw_hack"/>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="4">
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>比较代码</string>
+        </property>
+        <property name="margin">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QListWidget" name="lsw_compare"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1024</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_file">
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="action_load_source_file"/>
+    <addaction name="action_save_destination_file"/>
+    <addaction name="action_load_comparison_file"/>
+    <addaction name="separator"/>
+    <addaction name="action_exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_run">
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>运行</string>
+    </property>
+    <addaction name="action_single_step"/>
+    <addaction name="action_fast_forward"/>
+    <addaction name="action_stop"/>
+    <addaction name="action_rewind"/>
+    <addaction name="separator"/>
+    <addaction name="action_fast_translation"/>
+   </widget>
+   <widget class="QMenu" name="menu_help">
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="action_help"/>
+    <addaction name="action_about"/>
+   </widget>
+   <addaction name="menu_file"/>
+   <addaction name="menu_run"/>
+   <addaction name="menu_help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="sizeGripEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_load_source_file"/>
+   <addaction name="action_save_destination_file"/>
+   <addaction name="separator"/>
+   <addaction name="action_single_step"/>
+   <addaction name="action_fast_forward"/>
+   <addaction name="action_stop"/>
+   <addaction name="action_rewind"/>
+   <addaction name="separator"/>
+   <addaction name="action_fast_translation"/>
+   <addaction name="separator"/>
+   <addaction name="action_load_comparison_file"/>
+  </widget>
+  <action name="action_load_source_file">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/img/imgs/opendoc.gif</normaloff>:/img/imgs/opendoc.gif</iconset>
+   </property>
+   <property name="text">
+    <string>加载汇编程序</string>
+   </property>
+   <property name="toolTip">
+    <string>加载汇编程序</string>
+   </property>
+  </action>
+  <action name="action_save_destination_file">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/img/imgs/save.gif</normaloff>:/img/imgs/save.gif</iconset>
+   </property>
+   <property name="text">
+    <string>保存机器代码</string>
+   </property>
+   <property name="toolTip">
+    <string>保存机器代码</string>
+   </property>
+  </action>
+  <action name="action_load_comparison_file">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/img/imgs/smallequal.gif</normaloff>:/img/imgs/smallequal.gif</iconset>
+   </property>
+   <property name="text">
+    <string>加载比较代码</string>
+   </property>
+   <property name="toolTip">
+    <string>加载比较代码</string>
+   </property>
+  </action>
+  <action name="action_exit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+X</string>
+   </property>
+  </action>
+  <action name="action_single_step">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/img/imgs/vcrforward.gif</normaloff>:/img/imgs/vcrforward.gif</iconset>
+   </property>
+   <property name="text">
+    <string>单步执行</string>
+   </property>
+  </action>
+  <action name="action_fast_forward">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/img/imgs/vcrfastforward.gif</normaloff>:/img/imgs/vcrfastforward.gif</iconset>
+   </property>
+   <property name="text">
+    <string>快速前进</string>
+   </property>
+   <property name="toolTip">
+    <string>快速前进</string>
+   </property>
+  </action>
+  <action name="action_stop">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/img/imgs/vcrstop.gif</normaloff>:/img/imgs/vcrstop.gif</iconset>
+   </property>
+   <property name="text">
+    <string>停止</string>
+   </property>
+  </action>
+  <action name="action_fast_translation">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/img/imgs/hex.gif</normaloff>:/img/imgs/hex.gif</iconset>
+   </property>
+   <property name="text">
+    <string>快速编译</string>
+   </property>
+  </action>
+  <action name="action_help">
+   <property name="text">
+    <string>帮助提示</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="action_about">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="action_rewind">
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/img/imgs/vcrrewind.gif</normaloff>:/img/imgs/vcrrewind.gif</iconset>
+   </property>
+   <property name="text">
+    <string>返回首行</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections/>
+</ui>

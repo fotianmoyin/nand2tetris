@@ -1,0 +1,15 @@
+<RCC>
+  <qresource prefix="img">
+    <file>imgs/information.png</file>
+    <file>imgs/arrow2.gif</file>
+    <file>imgs/equal.gif</file>
+    <file>imgs/hex.gif</file>
+    <file>imgs/opendoc.gif</file>
+    <file>imgs/save.gif</file>
+    <file>imgs/smallequal.gif</file>
+    <file>imgs/vcrfastforward.gif</file>
+    <file>imgs/vcrforward.gif</file>
+    <file>imgs/vcrrewind.gif</file>
+    <file>imgs/vcrstop.gif</file>
+  </qresource>
+</RCC>

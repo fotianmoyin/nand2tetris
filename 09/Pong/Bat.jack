@@ -1,0 +1,75 @@
+class Bat{
+
+    field int x,y,w,h;
+
+    constructor Bat new() {
+        let w = 100;
+        let h = 5;
+        let x = 256 - (w / 2);
+        let y = 225;
+        do draw();
+        return this;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void draw() {
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x, y, x + w, y + h);
+        return;
+    }
+
+    method void erase() {
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x, y, x + w, y + h);
+        return;
+    }
+    
+    method void decWidth() {
+        if (w > 4) {
+            do erase();
+            let w = w - 2;
+            do draw();
+        }
+        return;
+    }
+
+    method int getX(){
+        return x;
+    }
+
+    method int getY(){
+        return y;
+    }
+
+    method int getWidth(){
+        return w;
+    }
+
+    /** Moves the square left by 2 pixels. */
+    method void moveLeft() {
+        if (x > 1) {
+            do Screen.setColor(false);
+            do Screen.drawRectangle((x + w) - 1, y, x + w, y + h);
+            let x = x - 2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x, y, x + 1, y + h);
+        }
+        return;
+    }
+
+    /** Moves the square right by 2 pixels. */
+    method void moveRight() {
+        if ((x + w) < 510) {
+            do Screen.setColor(false);
+            do Screen.drawRectangle(x, y, x + 1, y + h);
+            let x = x + 2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle((x + w) - 1, y, x + w, y + h);
+        }
+        return;
+    }
+}

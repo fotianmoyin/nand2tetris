@@ -1,0 +1,125 @@
+class Ball{
+
+    field int x,y,r,d;
+    field int directionX;//球的水平方向（0：不变；1：向左；2：向右）
+    field int directionY;//球的垂直方向（0：不变；1：向上；2：向下）
+    field int startX;
+
+    constructor Ball new() {
+        let r = 5;
+        let d = 2 * r;
+        let x = 20;
+        let y = r;
+        let directionX = 2;
+        let directionY = 2;
+        do draw();
+        return this;
+    }
+
+    /*
+    释放资源
+    */
+    method void dispose() {/* */
+        var String s0,s1;
+        let s0="abcdefg";let s1="01234567";
+        do Memory.deAlloc(this); /* 注释 */ return;/* 又是注释*/
+    }
+
+    method void draw() {
+        do Screen.setColor(true) ;
+        do Screen.drawCircle(x, y, r);
+        return;
+    }
+
+    method void erase() {
+        do Screen.setColor(false); do/* */Screen.drawCircle(x, y, r);
+        return;
+    }
+
+    method void start(){
+        do erase();
+        let startX = startX + 20;
+        if (startX > (510 - r)){
+            let startX = startX - 30;
+        }
+        if (startX < 1){
+            let startX = startX + 10;
+        }
+
+        let y = r;
+        let directionX = 2;
+        let directionY = 2;
+
+        do draw();
+        return;
+    }
+
+    method void move(){
+        var int offsetX,offsetY;
+        if (directionX = 1){
+            //向左
+            if ((x - r) < 1){
+                let directionX = 2;
+                let offsetX = 1;
+            }
+            else{
+                let offsetX = -1;
+            }
+        }
+        if ((offsetX = 0) & (directionX = 2)){
+            //向右
+            if (x + r > 510){
+                let directionX = 1;
+                let offsetX = -1;
+            }
+            else{
+                let offsetX = 1;
+            }
+        }
+        
+        if (directionY = 1){
+            //向上
+            if ((y - r) < 1){
+                let directionY = 2;
+                let offsetY = 1;
+            }
+            else{
+                let offsetY = -1;
+            }
+        }
+        if ((offsetY = 0) & (directionY = 2)){
+            //向下
+            if ((y + r) > 254){
+                let directionY = 1;
+                let offsetY = -1;
+            }
+            else{
+                let offsetY = 1;
+            }
+        }
+        if (~(offsetX = 0) | ~(offsetY = 0)){
+            do erase();
+            let x = x + offsetX;
+            let y = y + offsetY;
+            do draw();
+        }
+        return;
+    }
+
+    method int getX(){
+        return x;
+    }
+
+    method int getBottom(){
+        return y + r;
+    }
+
+    method boolean isGoDown(){
+        return directionY = 2;
+    }
+
+    method void setGoUp(){
+        let directionY = 1;
+        return;
+    }
+}

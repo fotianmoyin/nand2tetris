@@ -1,0 +1,19 @@
+class Ball{
+    field int x,y,z;
+
+    constructor Ball new(){
+        return this;
+    }
+
+    function int Add(int a, int b){
+        var int c;
+        let c = a + b;
+        return c;
+    }
+
+    method int Sub(int b){
+        var int c;
+        let c = x - b;
+        return c;
+    }
+}
