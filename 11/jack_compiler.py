@@ -72,7 +72,7 @@ class JackCompiler:
         jack_name, jack_suffix = os.path.splitext(jack_file)
 
         try:
-            tokenizer = JackTokenizer(f"{jack_folder}/{jack_file}")
+            tokenizer = JackTokenizer(f"{jack_folder}/{jack_file}", jack_file)
             vmwriter = VMWriter(f"{jack_folder}/{jack_name}.vm")
             engine = CompilationEngine(tokenizer, vmwriter)
             engine.compile_class()

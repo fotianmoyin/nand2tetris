@@ -19,7 +19,7 @@ class JackTokenizer:
     并根据Jack语法的规则将输入流分解成Jack语言的字元（终结符）。
     """
 
-    def __init__(self, jack_path: str) -> None:
+    def __init__(self, jack_path: str, jack_name:str) -> None:
         """
         打开输入文件/输入流，准备进行字元转换操作
         """
@@ -67,6 +67,7 @@ class JackTokenizer:
             "=",
             "~",
         ]
+        self.jack_name = jack_name;
         self.tokens = self.build_tokens(jack_path)
         # for token in self.tokens:
         #     print(f"{token.txt}")
