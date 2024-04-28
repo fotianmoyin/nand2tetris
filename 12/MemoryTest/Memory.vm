@@ -1,0 +1,376 @@
+function Memory.init 1
+push constant 2048
+pop local 0
+push constant 0
+push local 0
+add
+push constant 14336
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+function Memory.peek 1
+push constant 0
+pop local 0
+push argument 0
+push local 0
+add
+pop pointer 1
+push that 0
+return
+function Memory.poke 1
+push constant 0
+pop local 0
+push argument 0
+push local 0
+add
+push argument 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+function Memory.alloc 6
+push constant 0
+pop local 0
+push constant 2048
+pop local 1
+push argument 0
+push constant 1
+add
+pop local 4
+push constant 0
+not
+pop local 5
+label WHILE_EXP0
+push local 5
+not
+if-goto WHILE_END0
+push local 1
+push local 0
+add
+pop pointer 1
+push that 0
+pop local 2
+push local 2
+push constant 1
+sub
+push local 4
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 2
+push local 4
+sub
+pop local 2
+push local 1
+push local 2
+add
+pop local 3
+push local 3
+push local 0
+add
+push local 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push local 0
+add
+push local 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+pop local 5
+label IF_FALSE0
+push local 1
+push constant 1
+add
+push local 0
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+push constant 0
+lt
+push local 1
+push constant 0
+eq
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+pop local 5
+label IF_FALSE1
+goto WHILE_EXP0
+label WHILE_END0
+push local 3
+push constant 1
+add
+return
+function Memory.deAlloc 2
+push constant 0
+pop local 0
+push argument 0
+call Memory.zeroArray 1
+pop temp 0
+call Memory.getEndBlock 0
+pop local 1
+push local 1
+push constant 1
+add
+push local 0
+add
+push argument 0
+push constant 1
+sub
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+call Memory.mergeBlock 0
+pop temp 0
+push constant 0
+return
+function Memory.zeroArray 4
+push constant 0
+pop local 0
+push constant 2048
+push argument 0
+push constant 1
+sub
+push local 0
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+push constant 1
+sub
+pop local 2
+push constant 0
+pop local 3
+label WHILE_EXP0
+push local 3
+push local 2
+lt
+not
+if-goto WHILE_END0
+push local 3
+push argument 0
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 3
+push constant 1
+add
+pop local 3
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Memory.getEndBlock 4
+push constant 0
+pop local 0
+push constant 2048
+pop local 2
+push constant 0
+not
+pop local 1
+label WHILE_EXP0
+push local 1
+not
+if-goto WHILE_END0
+push local 2
+push constant 1
+add
+push local 0
+add
+pop pointer 1
+push that 0
+pop local 3
+push local 3
+push constant 0
+lt
+push local 3
+push constant 0
+eq
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+pop local 1
+goto IF_END0
+label IF_FALSE0
+push local 3
+pop local 2
+label IF_END0
+goto WHILE_EXP0
+label WHILE_END0
+push local 2
+return
+function Memory.mergeBlock 4
+push constant 0
+pop local 0
+push constant 2048
+pop local 1
+push constant 0
+not
+pop local 3
+label WHILE_EXP0
+push local 3
+not
+if-goto WHILE_END0
+push local 1
+push local 1
+push local 0
+add
+pop pointer 1
+push that 0
+add
+pop local 2
+push local 2
+call Memory.unloadBlock 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 1
+push local 0
+add
+push local 1
+push local 0
+add
+pop pointer 1
+push that 0
+push local 2
+push local 0
+add
+pop pointer 1
+push that 0
+add
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 2
+push local 0
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 2
+push constant 1
+add
+push local 0
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END0
+label IF_FALSE0
+push local 1
+push constant 1
+add
+push local 0
+add
+pop pointer 1
+push that 0
+push constant 0
+lt
+or
+push constant 0
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+pop local 3
+goto IF_END1
+label IF_FALSE1
+pop local 1
+label IF_END1
+label IF_END0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Memory.unloadBlock 3
+push constant 0
+pop local 0
+push constant 2048
+pop local 1
+label WHILE_EXP0
+push constant 0
+not
+not
+if-goto WHILE_END0
+push local 1
+push constant 1
+add
+push local 0
+add
+pop pointer 1
+push that 0
+pop local 2
+push local 2
+push constant 0
+lt
+push local 2
+push constant 0
+eq
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+goto IF_END0
+label IF_FALSE0
+push local 2
+push argument 0
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 1
+push constant 1
+add
+push local 0
+add
+push local 2
+push constant 1
+add
+push local 0
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+not
+return
+label IF_FALSE1
+push local 2
+pop local 1
+label IF_END0
+goto WHILE_EXP0
+label WHILE_END0
