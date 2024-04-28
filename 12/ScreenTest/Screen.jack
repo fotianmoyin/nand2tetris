@@ -1,0 +1,258 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Screen.jack
+
+/**
+ * A library of functions for displaying graphics on the screen.
+ * The Hack physical screen consists of 512 rows (indexed 0..511, top to bottom)
+ * of 256 pixels each (indexed 0..255, left to right). The top left pixel on 
+ * the screen is indexed (0,0).
+ */
+class Screen {
+    static int array_start;
+    static Array array; 
+    static boolean color;
+
+    /** Initializes the Screen. */
+    function void init() {
+        let array_start = 16384;
+        let color = true;
+        return;
+    }
+
+    /** Erases the entire screen. */
+    function void clearScreen() {
+        var int i;
+        let array = array_start;
+        while (i < 8192) {
+            let array[i] = 0;
+            let i = i + 1;
+        }
+        return;
+    }
+
+    /** Sets the current color, to be used for all subsequent drawXXX commands.
+     *  Black is represented by true, white by false. */
+    function void setColor(boolean b) {
+        let color = b;
+        return;
+    }
+
+    /** Draws the (x,y) pixel, using the current color. */
+    function void drawPixel(int x, int y) {
+        var int addr;
+        var int pre_w;
+        var int pre_i;
+
+        if ((x < 0) | (x > 511) | (y < 0) | (y > 255)){
+            do Sys.error(7);
+        }
+
+        let pre_w = x / 16;
+        let pre_i = x - (pre_w * 16);
+        let addr = (32 * y) + pre_w;
+        do Screen.drawPixelByAddr(addr, pre_i, pre_i + 1);
+        return;
+    }
+
+    /** Draws a line from pixel (x1,y1) to pixel (x2,y2), using the current color. */
+    function void drawLine(int x1, int y1, int x2, int y2) {
+        var int dx, dy;
+        var int x, y;
+        var int m;
+
+        if ((x1 < 0) | (x2 > 511) | (y1 < 0) | (y2 > 255)){
+            do Sys.error(8);
+        }
+
+        // 将线向转换为从左到右
+        if (x1 > x2){
+            let dx = x1;
+            let x1 = x2;
+            let x2 = dx;
+            let dy = y1;
+            let y1 = y2;
+            let y2 = dy;
+        }
+
+        if (x1 = x2){
+            // 竖线
+            if (y1 > y2){
+                let dy = y1;
+                let y1 = y2;
+                let y2 = dy;
+            }
+            do Screen.drawRectangle(x1, y1, x2, y2);
+        }
+        else{
+            if (y1 = y2){
+                // 横线
+                do Screen.drawRectangle(x1, y1, x2, y2);
+            }
+            else{
+                // 斜线
+                let dx = Math.abs(x2 - x1);
+                let dy = Math.abs(y2 - y1);
+                
+                while((x < dx) & (y < dy)){
+                    if (y1 < y2){
+                        // 左上角到右下角
+                        do Screen.drawPixel(x1 + x, y1 + y);
+                    }
+                    else{
+                        // 左下角到右上角
+                        do Screen.drawPixel(x1 + x, y1 - y);
+                    }
+                    if (m < 0){
+                    // if (((dy * x) - (dx * y)) < 0){
+                        let x = x + 1;
+                        let m = m + dy;
+                    }
+                    else{
+                        let y = y + 1;
+                        let m = m - dx;
+                    }
+                }
+            }
+        }
+        return;
+    }
+
+    /** Draws a filled rectangle whose top left corner is (x1, y1)
+     * and bottom right corner is (x2,y2), using the current color. */
+    function void drawRectangle(int x1, int y1, int x2, int y2) {
+        var int addr;
+        var int pre_w;
+        var int pre_i;
+        var int aft_w;
+        var int aft_i;
+        var int row, end_row;
+        var int col;
+
+        if ((x1 > x2) | (y1 > y2) | (x1 < 0) | (x2 > 511) | (y1 < 0) | (y2 > 255)){
+            do Sys.error(9);
+        }
+
+        let pre_w = x1 / 16;
+        let pre_i = x1 - (pre_w * 16);
+        let aft_w = x2 / 16;
+        let aft_i = x2 - (aft_w * 16);
+
+        let row = y1;
+        let end_row = y2 + 1;
+        while(row < end_row){
+            let addr = (32 * row) + pre_w;
+            if (aft_w > pre_w){
+                // 左侧非整字位
+                do Screen.drawPixelByAddr(addr, pre_i, 16);
+                // 中间整字位
+                let col = pre_w + 1;
+                while(col < aft_w){
+                    let addr = addr + 1;
+                    do Screen.drawWord(addr);
+                    let col = col + 1;
+                }
+                // 右侧非整字位
+                let addr = addr + 1;
+                do Screen.drawPixelByAddr(addr, 0, aft_i + 1);
+            }
+            else{
+                // 长度不足一个字
+                do Screen.drawPixelByAddr(addr, pre_i, aft_i + 1);
+            }
+            let row = row + 1;
+        }
+        
+        return;
+    }
+
+    /**
+    * 向屏幕映像指定地址中绘制指定的位区间
+    * 参数：
+    * addr(int):待绘制的屏幕映像地址
+    * start_bit(int):位区间起始（包含起始位置）
+    * end_bit(int):位区间结束（不包含结束位置）
+    */
+    function void drawPixelByAddr(int addr, int start_bit, int end_bit){
+        var int bit;
+        var int val;
+
+        let array = array_start + addr;
+        let bit = start_bit;
+        while(bit < end_bit){
+            let val = val + Screen.getBitVal(bit);
+            let bit = bit + 1;
+        }
+
+        if (color){
+            let array[0] = array[0] | val;
+        }
+        else{
+            let val = ~val;
+            let array[0] = array[0] & val;
+        }
+        return;
+    }
+
+    /**
+    * 计算指定位为1的值
+    * 参数：
+    * bit(int):为一的位
+    */
+    function int getBitVal(int bit){
+        var int i;
+        var int val;
+        let val = 1;
+        while(i < bit){
+            let val = val + val;
+            let i = i + 1;
+        }
+        return val;
+    }
+
+    /**
+    * 填充指定屏幕映像地址
+    */
+    function void drawWord(int addr){
+        let array = array_start + addr;
+        let array[0] = color;
+        return;
+    }
+
+    /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
+    function void drawCircle(int x, int y, int r) {
+        var int w,hw,end;
+        var int start,s,rs;
+        var int x_w,x$w,y_s,y$s,x_s,x$s,y_w,y$w;
+        if ((x < 0) | (x > 511) | (y < 0) | (y > 255)){
+            do Sys.error(12);
+        }
+        if (((x - r) < 0) | ((x + r) > 511) | ((y - r) < 0) | ((y + r) > 255)){
+            do Sys.error(13);
+        }
+        let hw = Math.sqrt(r * r / 2);// 中间方块的边长的一半
+        let end = r - hw;// 月牙的厚度
+        let rs = r * r;
+        while(start < end){
+            let s = r - start;
+            let w = Math.sqrt(rs - (s * s));
+            let x_w = x - w;
+            let x$w = x + w;
+            let y_s = y - s;
+            let y$s = y + s;
+            let x_s = x - s;
+            let x$s = x + s;
+            let y_w = y - w;
+            let y$w = y + w;
+            do Screen.drawLine(x_w, y_s, x$w, y_s);// 上月牙
+            do Screen.drawLine(x_w, y$s, x$w, y$s);// 下月牙
+            do Screen.drawLine(x_s, y_w, x_s, y$w);// 左月牙
+            do Screen.drawLine(x$s, y_w, x$s, y$w);// 右月牙
+            let start = start + 1;
+        }
+        // 中间方块
+        do Screen.drawRectangle(x - hw, y - hw, x + hw, y + hw);
+        return;
+    }
+}
