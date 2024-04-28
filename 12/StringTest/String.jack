@@ -1,0 +1,301 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/String.jack
+
+/**
+ * Represents character strings. In addition for constructing and disposing
+ * strings, the class features methods for getting and setting individual
+ * characters of the string, for erasing the string's last character,
+ * for appending a character to the string's end, and more typical
+ * string-oriented operations.
+ */
+class String {
+    field int max_len;
+    field Array array;
+    field int used_len;
+
+    /** constructs a new empty string with a maximum length of maxLength
+     *  and initial length of 0. */
+    constructor String new(int maxLength) {
+        if (maxLength < 0){
+            do Sys.error(14);
+        }
+        if (maxLength > 0){
+            let array = Array.new(maxLength);
+        }
+        let max_len = maxLength;
+        let used_len = 0;
+        return this;
+    }
+
+    /** Disposes this string. */
+    method void dispose() {
+        if (max_len > 0){
+            do array.dispose();
+        }
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Returns the current length of this string. */
+    method int length() {
+        return used_len;
+    }
+
+    /** Returns the character at the j-th location of this string. */
+    method char charAt(int j) {
+        if ((j < 0) | (j > used_len) | (j = used_len)){
+            do Sys.error(15);
+        }
+        return array[j];
+    }
+
+    /** Sets the character at the j-th location of this string to c. */
+    method void setCharAt(int j, char c) {
+        if ((j < 0) | (j > used_len) | (j = used_len)){
+            do Sys.error(16);
+        }
+        let array[j] = c;
+        return;
+    }
+
+    /** Appends c to this string's end and returns this string. */
+    method String appendChar(char c) {
+        if (used_len = max_len){
+            do Sys.error(17);
+        }
+        let array[used_len] = c;
+        let used_len = used_len + 1;
+        return this;
+    }
+
+    /** Erases the last character from this string. */
+    method void eraseLastChar() {
+        if (used_len = 0){
+            do Sys.error(18);
+        }
+        let used_len = used_len - 1;
+        return;
+    }
+
+    /** Returns the integer value of this string, 
+     *  until a non-digit character is detected. */
+    method int intValue() {
+        var int val;
+        var int num;
+        var int i;
+        var boolean neg;
+        var boolean trans;
+        let trans = true;
+        if ((used_len > 0) & (charAt(0) = 45)){
+            let neg = true;
+            let i = i + 1;
+        }
+        while (trans) {
+            if (i < used_len){
+                let num = charAt(i) - 48;
+                if ((num < 0) | (num > 9)){
+                    let trans = false;
+                }
+                else{
+                    let val = (val * 10) + num;
+                }
+            }
+            else{
+                let trans = false;
+            }
+            let i = i + 1;
+        }
+        if (neg){
+            // 负值运算
+            let val = -val;
+        }
+        return val;
+    }
+
+    /** 
+    * Sets this string to hold a representation of the given value. 
+    * 该方案和官方方案不同。该方案为：将数值的最后一位逐渐追加进来，最后，再将字符串进行翻转操作。
+    */
+    // method void setInt(int val) {
+    //     if (max_len = 0){
+    //         do Sys.error(19);
+    //     }
+    //     do clear();
+
+    //     if (val < 0){
+    //         // 负值
+    //         do reverseAppendInt(-val);
+    //         do appendChar(45);
+    //     }
+    //     else{
+    //         // 正值
+    //         do reverseAppendInt(val);
+    //     }
+
+    //     do flip();
+
+    //     return;
+    // }
+
+    /**
+    * 清空字符串
+    */
+    method void clear(){
+        let used_len = 0;
+        return;
+    }
+
+    /**
+    * 翻转字符串
+    * 比如：12345，翻转为：54321
+    */
+    method void flip(){
+        var int start_i;
+        var int end_i;
+        var char c;
+        let start_i = 0;
+        let end_i = length() - 1;
+        while(end_i > start_i){
+            let c = charAt(end_i);
+            do setCharAt(end_i, charAt(start_i));
+            do setCharAt(start_i, c);
+            let start_i = start_i + 1;
+            let end_i = end_i - 1;
+        }
+        return;
+    }
+
+    /**
+    * 反向追加数值
+    * 比如：将12345，追加进去后为：54321
+    */
+    method void reverseAppendInt(int val){
+        var int divisor;//除数
+        var int last_val;//最后一位
+        if (val < 10){
+            do appendChar(val + 48);
+        }
+        else{
+            let divisor = val / 10;
+            let last_val = val - (divisor * 10);
+            do appendChar(last_val + 48);
+            do reverseAppendInt(divisor);
+        }
+        return;
+    }
+
+    /** Sets this string to hold a representation of the given value. */
+    method void setInt(int val) {
+        var String s;
+        var int i;
+
+        if (max_len = 0){
+            do Sys.error(19);
+        }
+        // 清空当前字符串
+        do clear();
+        // 获得转换得到的字符串
+        let s = String.int2String(val);
+        // 将获得的字符串逐个赋给当前对象
+        while(i < s.length()){
+            do appendChar(s.charAt(i));
+            let i = i + 1;
+        }
+        // 释放转换得到的字符串
+        do s.dispose();
+
+        return;
+    }
+
+    /**
+    * 数值转换字符串
+    * 该方法与官方给出的实现方案一致
+    * 参数：
+    * val(int):待转换的数值
+    * 返回值：
+    * String:转换得到的字符串
+    */
+    function String int2String(int val){
+        var String s;
+        var boolean neg;
+        var int divisor;
+        var int last_val;
+        var int c;
+
+        if (val < 0){
+            let neg = true;
+            let val = -val;
+        }
+
+        // 减数
+        let divisor = val / 10;
+        // 最后一位
+        let last_val = val - (divisor * 10);
+        // 最后一位对应的字符
+        let c = last_val + 48;
+        if (val < 10){
+            let c = val + 48;
+            // 初始化一个最大数字所需的容量（hack平台数字最大5位，再加一位负号位）
+            let s = String.new(6);
+            if (neg){
+                // 追加一个负号
+                let s = s.appendChar(45);
+            }
+            let s = s.appendChar(c);
+            return s;
+        }
+        else{
+            if (neg){
+                let s = String.int2String(-divisor);
+            }
+            else{
+                let s = String.int2String(divisor);
+            }
+            let s = s.appendChar(c);
+            return s;
+        }
+    }
+
+    /**
+    * 返回数值的转换为字符串后，需要的长度
+    * 该方法支持计算负值
+    * 参数：
+    * val(int):需要计算长度的数值
+    * 返回值：
+    * int:计算的长度
+    */
+    function int intLength(int val){
+        var int len;
+
+        if (val < 0){
+            let len = len + 1;
+            let val = -val;
+        }
+
+        while(val > 10){
+            let len = len + 1;
+            let val = val / 10;
+        }
+
+        let len = len + 1;
+
+        return len;
+    }
+
+    /** Returns the new line character. */
+    function char newLine() {
+        return 128;
+    }
+
+    /** Returns the backspace character. */
+    function char backSpace() {
+        return 129;
+    }
+
+    /** Returns the double quote (") character. */
+    function char doubleQuote() {
+        return 34;
+    }
+}
