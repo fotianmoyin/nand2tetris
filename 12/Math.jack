@@ -1,0 +1,252 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Math.jack
+
+/**
+ * A library of commonly used mathematical functions.
+ * Note: Jack compilers implement multiplication and division using OS method calls.
+ */
+class Math {
+    static Array bits;
+    static int _q2y;// divide递归时使用的变量，表示值：2 * q * y
+
+    /** Initializes the library. */
+    function void init() {
+        var int i;
+        var int val;
+        let bits = Array.new(16);
+        let val = 1;
+        while (i < 16) {
+            let bits[i] = val;
+            let val = val + val;
+            let i = i + 1;
+        }
+        return;
+    }
+
+    /** Returns the absolute value of x. */
+    function int abs(int x) {
+        if (x > 0){
+            return x;
+        }
+        else{
+            return -x;
+        }
+    }
+
+    /** Returns the product of x and y. 
+     *  When a Jack compiler detects the multiplication operator '*' in the 
+     *  program's code, it handles it by invoking this method. In other words,
+     *  the Jack expressions x*y and multiply(x,y) return the same value.
+     */
+    function int multiply(int x, int y) {
+        var boolean neg;
+        var int sum;
+        var int shifted_x;
+        var int i;
+        // 判断计算结果是否负值
+        if (((x < 0) & (y > 0)) | ((x > 0) & (y < 0))){
+            let neg = true;
+        }
+        let x = Math.abs(x);
+        let y = Math.abs(y);
+        // 将大值置换到x
+        if (x < y){
+            let i = y;
+            let y = x;
+            let x = i;
+        }
+        let i = 0;
+        let shifted_x = x;
+        while(i < 16){
+            if (bits[i] & y){
+                let sum = sum + shifted_x;
+            }
+            let shifted_x = shifted_x + shifted_x;
+            let i = i + 1;
+        }
+        if (neg){
+            let sum = -sum;
+        }
+        return sum;
+    }
+
+    /** Returns the integer part of x/y.
+     *  When a Jack compiler detects the multiplication operator '/' in the 
+     *  program's code, it handles it by invoking this method. In other words,
+     *  the Jack expressions x/y and divide(x,y) return the same value.
+     */
+    function int divide(int x, int y) {
+        var boolean neg;
+        var int val;
+        if (y = 0){
+            do Sys.error(3);
+        }
+        if (((x < 0) & (y > 0)) | ((x > 0) & (y < 0))){
+            let neg = true;
+        }
+        let x = Math.abs(x);
+        let y = Math.abs(y);
+        let _q2y = 0;
+        let val = Math.divide_imp(x, y);
+        if (neg){
+            let val = -val;
+        }
+        return val;
+    }
+
+    /**
+    * 官方递归方法的实现
+    */
+    function int divide_imp(int x, int y){
+        var int q, q2, y2;
+
+        if (y > x){
+            return 0;
+        }
+
+        if (y = 1){
+            return x;
+        }
+
+        let y2 = y + y;
+        if (y2 < 0){
+            let q = 0;
+        }
+        else{
+            let q = Math.divide_imp(x, y2);
+        }
+
+        let q2 = q + q;
+        if ((x - _q2y) < y){
+            return q2;
+        }
+        else{
+            let _q2y = _q2y + y;
+            return q2 + 1;
+        }
+    }
+
+    /**
+    * 从被除数上不断减去除数，减去的总个数就是商
+    * 该实现算法性能随着被除数的增大而降低
+    */
+    // function int divide_imp(int x, int y){
+    //     var int q;
+    //     while(~(x < y)){
+    //         let x = x - y;
+    //         let q = q + 1;
+    //     }
+    //     return q;
+    // }
+
+    /**
+    * 该方法是官方递归实现方法的非递归版本
+    */
+    // function int divide_imp(int x, int y){
+    //     var Array array;
+    //     var int q, q2, q2y;
+    //     var int i;
+    //     var boolean goon;
+
+    //     if (y > x){
+    //         return 0;
+    //     }
+
+    //     if (y = 1){
+    //         return x;
+    //     }
+
+    //     let array = Array.new(12);
+    //     let goon = true;//是否还能继续。如果y>=16384,那么2y就会溢出，为防止这样的情况，及时跳出循环
+    //     //按y的两倍进行增长检测，直到大于x,或产生溢出
+    //     while((~(y > x)) & goon){
+    //         let array[i] = y;
+    //         if (y < 16384){
+    //             let y = y + y;
+    //         }
+    //         else{
+    //             let goon = false;
+    //         }
+    //         let i = i + 1;
+    //     }
+    //     //倒序判断
+    //     let i = i - 1;
+    //     while(~(i < 0)){
+    //         let y = array[i];
+    //         let q2 = q + q;
+    //         // let q2y = q2 * y;
+    //         if ((x - q2y) < y){
+    //             let q = q2;
+    //         }
+    //         else{
+    //             let q = q2 + 1;
+    //             let q2y = q2y + y;
+    //         }
+    //         let i = i - 1;
+    //     }
+
+    //     do array.dispose();
+
+    //     //产生溢出后，减去已计算值后，再计算一次
+    //     if (~goon){
+    //         let x = x - q2y;
+    //         let q = q + Math.divide_imp(x, y);
+    //     }
+
+    //     return q;
+    // }
+
+    /** Returns the integer part of the square root of x. */
+    function int sqrt(int x) {
+        var int low,high,mid,sqrt;
+        if (x < 0){
+            do Sys.error(4);
+        }
+        let low = 1;
+        let high = x;
+        while(~(low > high)){
+            let mid = low + ((high - low) / 2);
+            let sqrt = x / mid;
+
+            if(Math.abs(mid - sqrt) > 1){
+                if (mid > sqrt){
+                    let high = mid;
+                }
+                else{
+                    let low = mid;
+                }
+            }
+            else{
+                if (mid < sqrt){
+                    return mid;
+                }
+                else{
+                    return sqrt;
+                }
+            }
+        }
+        return high;
+    }
+
+    /** Returns the greater number. */
+    function int max(int a, int b) {
+        if (a > b){
+            return a;
+        }
+        else{
+            return b;
+        }
+    }
+
+    /** Returns the smaller number. */
+    function int min(int a, int b) {
+        if (a < b){
+            return a;
+        }
+        else{
+            return b;
+        }
+    }
+}

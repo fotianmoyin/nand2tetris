@@ -1,0 +1,215 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Memory.jack
+
+/**
+ * This library provides two services: direct access to the computer's main
+ * memory (RAM), and allocation and recycling of memory blocks. The Hack RAM
+ * consists of 32,768 words, each holding a 16-bit binary number.
+ */ 
+class Memory {
+
+    /** Initializes the class. */
+    function void init() {
+        var Array array;
+        let array = 2048;
+        let array[0] = 14336;//2048 ~ 16383
+        return;
+    }
+
+    /** Returns the RAM value at the given address. */
+    function int peek(int address) {
+        var Array array;
+        let array = 0;
+        return array[address];
+    }
+
+    /** Sets the RAM value at the given address to the given value. */
+    function void poke(int address, int value) {
+        var Array array;
+        let array = 0;
+        let array[address] = value;
+        return;
+    }
+
+    /** Finds an available RAM block of the given size and returns
+     *  a reference to its base address. */
+    function int alloc(int size) {
+        var Array array;
+        var int parent_addr;
+        var int parent_len;
+        var int child_addr;
+        var int child_len;
+        var boolean go_on;
+
+        let array = 0;
+        let parent_addr = 2048;
+        let child_len = size + 1;
+        let go_on = true;
+        while (go_on) {
+            // 判断当前块是否有足够空间
+            let parent_len = array[parent_addr];
+            if ((parent_len - 1) > child_len){
+                let parent_len = parent_len - child_len;
+                let child_addr = parent_addr + parent_len;
+                let array[child_addr] = child_len;
+                let array[parent_addr] = parent_len;
+                let go_on = false;
+            }
+            // 取下一块地址
+            let parent_addr = array[parent_addr + 1];
+            // 判断下一块是否为空
+            if ((parent_addr < 0) | (parent_addr = 0)){
+                let go_on = false;
+            }
+        }
+
+        do Memory.zeroArray(child_addr + 1);
+        return child_addr + 1;
+    }
+
+    /** De-allocates the given object (cast as an array) by making
+     *  it available for future allocations. */
+    function void deAlloc(Array o) {
+        var Array array;
+        var int addr;
+
+        let array = 0;
+        // 重置o数组各项值为零
+        do Memory.zeroArray(o);
+        //查找链表最后一块
+        let addr = Memory.getEndBlock();
+        //追加到链表最后一块
+        let array[addr + 1] = o - 1;
+        // 整理内存
+        do Memory.mergeBlock();
+        return;
+    }
+
+    /**
+    * 将数组各项值为零
+    * 参数：
+    * o(Array):待重置的数组
+    */
+    function void zeroArray(Array o){
+        var Array array;
+        
+        var int size;
+        var int len;
+        var int index;
+
+        let array = 0;
+        let addr = 2048;
+        // 重置o数组各项值为零
+        let size = array[o - 1];
+        let len = size - 1;
+        let index = 0;
+        while(index < len){
+            let o[index] = 0;
+            let index = index + 1;
+        }
+        return;
+    }
+
+    /**
+    * 获取内存链表的最后一块的地址
+    * 返回值：
+    * int:最后一块的地址
+    */
+    function int getEndBlock(){
+        var Array array;
+        var boolean go_on;
+        var int addr;
+        var int next_addr;
+
+        let array = 0;
+        let addr = 2048;
+
+        //查找链表最后一块
+        let go_on = true;
+        while(go_on){
+            let next_addr = array[addr + 1];
+            if ((next_addr < 0) | (next_addr = 0)){
+                //到达最后一块
+                let go_on = false;
+            }
+            else{
+                let addr = next_addr;
+            }
+        }
+        return addr;
+    }
+
+    /**
+    * 将连续的块合并到一起
+    */
+    function void mergeBlock(){
+        var Array array;
+        var int addr;
+        var int child_addr;
+
+        var boolean go_on;
+
+        let array = 0;
+        let addr = 2048;
+        let go_on = true;
+
+        while(go_on){
+            let child_addr = addr + array[addr];
+            if (Memory.unloadBlock(child_addr)){
+                // 查找到了下一空块，进行并块处理
+                // 延长父块长度
+                let array[addr] = array[addr] + array[child_addr];
+                //重置子块数据
+                let array[child_addr] = 0;
+                let array[child_addr + 1] = 0;
+            }
+            else{
+                // 没有可并的子块
+                let next_addr = array[addr + 1];
+                if (next_addr < 0 | next_addr = 0){
+                    //到达最后一块
+                    let go_on = false;
+                }
+                else{
+                    let addr = next_addr;
+                }
+            }
+        }
+        return;
+    }
+
+    /**
+    * 从内存链表中卸载指定地址的块
+    * 参数：
+    * address(int):待卸载块地址
+    * 返回值：
+    * boolean:卸载成功，返回true；否则，返回false
+    */
+    function boolean unloadBlock(int address){
+        var Array array;
+        var int addr;
+        var int next_addr;
+
+        let array = 0;
+        let addr = 2048;
+
+        while(true){
+            let next_addr = array[addr + 1];
+            
+            if ((next_addr < 0) | (next_addr = 0)){
+                //到达最后一块
+                return false;
+            }
+            else{
+                if (next_addr = address){
+                    // 卸载：将卸载块上一块指向到卸载块下一块
+                    let array[addr + 1] = array[next_addr + 1];
+                    return true;
+                }
+                let addr = next_addr;
+            }
+        }
+    }
+}
