@@ -13,21 +13,25 @@
             "args": "${command:pickArgs}"
         },
         {
-            "name": "Vmtranslator",
+            "name": "Vmtranslator7",
             "type": "debugpy",
             "request": "launch",
-            // "program": "${workspaceFolder}/07/vmtranslator.py",
-            // "program": "${workspaceFolder}/08/vmtranslator.py",
-            // "program": "${workspaceFolder}/10/jack_analyzer.py",
-            "program": "${workspaceFolder}/11/jack_compiler.py",
+            "program": "${workspaceFolder}/07/vmtranslator.py",
             "console": "integratedTerminal",
             // "args": "${command:pickArgs}"
             // "args": "07/StackArithmetic/SimpleAdd/SimpleAdd.vm"
             // "args": "07/StackArithmetic/StackTest"
             // "args": "07/MemoryAccess/BasicTest"
             // "args": "07/MemoryAccess/PointerTest"
-            // "args": "07/MemoryAccess/StaticTest"
-
+            "args": "07/MemoryAccess/StaticTest"
+        },
+        {
+            "name": "Vmtranslator8",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/08/vmtranslator.py",
+            "console": "integratedTerminal",
+            // "args": "${command:pickArgs}"
             // "args": "08/ProgramFlow/BasicLoop"
             // "args": "08/ProgramFlow/FibonacciSeries"
             // "args": "08/FunctionCalls/SimpleFunction"
@@ -36,13 +40,27 @@
             // "args": "08/SelfDemo/Power/Sys.vm"
             // "args": "08/SelfDemo/Adder/Sys.vm"
             // "args": "08/FunctionCalls/StaticsTest"
-            // "args": "08/FunctionCalls/NestedCall"
-
-            // "args": "09/Pong/Ball.jack"
+            "args": "08/FunctionCalls/NestedCall"
+        },
+        {
+            "name": "JackAnalyzer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/10/jack_analyzer.py",
+            "console": "integratedTerminal",
+            // "args": "${command:pickArgs}"
 
             // "args": "10/Square"
             // "args": "10/ArrayTest"
-            // "args": "10/ExpressionLessSquare"
+            "args": "10/ExpressionLessSquare"
+        },
+        {
+            "name": "JackCompiler",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/11/jack_compiler.py",
+            "console": "integratedTerminal",
+            // "args": "${command:pickArgs}"
 
             // "args": "11/Simple"
             // "args": "11/Seven"
@@ -51,10 +69,17 @@
             // "args": "11/Pong"
             // "args": "11/Pong/Ball.jack"
             // "args": "11/ComplexArrays"
-            "args": "11/ConvertToBin"
+            // "args": "11/ConvertToBin"
             
-            
-            
+            // "args": "12/SysTest"
+            // "args": "12/MemoryTest"
+            // "args": "12/ArrayTest"
+            // "args": "12/KeyboardTest"
+            // "args": "12/StringTest"
+            // "args": "12/OutputTest"
+            // "args": "12/ScreenTest"
+            // "args": "12/MathTest"
+            "args": "12/Pong"
         }
     ]
 }
