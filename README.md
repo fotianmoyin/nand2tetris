@@ -13,15 +13,19 @@
 # VS插件推荐
 #### Nand2Tetris For Vscode
 该插件可以帮助实现.out、.tst、.cmp、.jack文件的高亮。
+
 ![](./assets/imgs/Nand2TetrisForVscode.png)
 #### Nand2Tetris Tools
 该插件可以方便我们对hdl的测试，它可以在我们打开hdl文件后，右上角现实测试按钮，非常方便测试hdl代码。
+
 ![](./assets/imgs/Nand2TetrisTools.png)
 #### Nand2Tetris
 这个插件可以帮助完善jack代码高亮，上面插件`Nand2Tetris For Vscode`虽然能高亮jack代码，但是不够完整，比如函数调用代码的高亮就没有。
+
 ![](./assets/imgs/Nand2Tetris.png)
 #### Nand2Tetris HDL Visualizer
 该插件可以实现hdl的可视化显示，可以让我们直观的看到hdl连接情况。
+
 ![](./assets/imgs/nand2tetris-hdl-visualizer.png)
 
 # 感谢与链接
