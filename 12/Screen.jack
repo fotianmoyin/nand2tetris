@@ -127,7 +127,7 @@ class Screen {
         var int pre_i;
         var int aft_w;
         var int aft_i;
-        var int row, end_row;
+        var int row, end_row, row32;
         var int col;
 
         if ((x1 > x2) | (y1 > y2) | (x1 < 0) | (x2 > 511) | (y1 < 0) | (y2 > 255)){
@@ -141,8 +141,9 @@ class Screen {
 
         let row = y1;
         let end_row = y2 + 1;
+        let row32 = 32 * row;
         while(row < end_row){
-            let addr = (32 * row) + pre_w;
+            let addr = row32 + pre_w;
             if (aft_w > pre_w){
                 // 左侧非整字位
                 do Screen.drawPixelByAddr(addr, pre_i, 16);
@@ -161,6 +162,7 @@ class Screen {
                 // 长度不足一个字
                 do Screen.drawPixelByAddr(addr, pre_i, aft_i + 1);
             }
+            let row32 = row32 + 32;
             let row = row + 1;
         }
         

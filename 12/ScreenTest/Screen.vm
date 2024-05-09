@@ -243,7 +243,7 @@ label IF_END4
 label IF_END2
 push constant 0
 return
-function Screen.drawRectangle 8
+function Screen.drawRectangle 9
 push argument 0
 push argument 2
 gt
@@ -300,15 +300,17 @@ push argument 3
 push constant 1
 add
 pop local 6
+push constant 32
+push local 5
+call Math.multiply 2
+pop local 7
 label WHILE_EXP0
 push local 5
 push local 6
 lt
 not
 if-goto WHILE_END0
-push constant 32
-push local 5
-call Math.multiply 2
+push local 7
 push local 1
 add
 pop local 0
@@ -326,9 +328,9 @@ pop temp 0
 push local 1
 push constant 1
 add
-pop local 7
+pop local 8
 label WHILE_EXP1
-push local 7
+push local 8
 push local 3
 lt
 not
@@ -340,10 +342,10 @@ pop local 0
 push local 0
 call Screen.drawWord 1
 pop temp 0
-push local 7
+push local 8
 push constant 1
 add
-pop local 7
+pop local 8
 goto WHILE_EXP1
 label WHILE_END1
 push local 0
@@ -367,6 +369,10 @@ add
 call Screen.drawPixelByAddr 3
 pop temp 0
 label IF_END1
+push local 7
+push constant 32
+add
+pop local 7
 push local 5
 push constant 1
 add

@@ -25,41 +25,41 @@ goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-function Sys.wait 3
-label WHILE_EXP0
-push local 0
-push constant 32767
+function Sys.wait 1
+push argument 0
+push constant 0
 lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 1
+call Sys.error 1
+pop temp 0
+label IF_FALSE0
+label WHILE_EXP0
+push argument 0
+push constant 0
+gt
 not
 if-goto WHILE_END0
+push constant 50
+pop local 0
 label WHILE_EXP1
-push local 1
-push constant 32767
-lt
+push local 0
+push constant 0
+gt
 not
 if-goto WHILE_END1
-label WHILE_EXP2
-push local 2
-push constant 32767
-lt
-not
-if-goto WHILE_END2
-push local 2
-push constant 1
-add
-pop local 2
-goto WHILE_EXP2
-label WHILE_END2
-push local 1
-push constant 1
-add
-pop local 1
-goto WHILE_EXP1
-label WHILE_END1
 push local 0
 push constant 1
-add
+sub
 pop local 0
+goto WHILE_EXP1
+label WHILE_END1
+push argument 0
+push constant 1
+sub
+pop argument 0
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
